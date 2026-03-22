@@ -19,7 +19,6 @@ export default async function DashboardLayout({
     .single()
 
   const isLawyer = profile?.role === 'lawyer'
-  const isAdmin = profile?.is_admin === true
 
   return (
     <div className="flex min-h-screen">
@@ -35,11 +34,7 @@ export default async function DashboardLayout({
             My Lawyer Profile
           </a>
         )}
-        {isAdmin && (
-          <a href="/admin" className="px-3 py-2 rounded hover:bg-slate-100 text-purple-600">
-            Admin Panel
-          </a>
-        )}
+        
         <div className="mt-auto space-y-2">
           <p className="text-sm text-slate-500 px-3">{user.email}</p>
           <LogoutButton />
