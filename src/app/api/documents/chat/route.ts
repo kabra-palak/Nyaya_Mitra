@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const context = chunks.map((c: any) => c.content).join('\n\n')
 
     // Generate answer using Gemini
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite-preview' })
     const prompt = `You are a legal assistant. Use the following context from a legal document to answer the question. If the answer is not in the context, say so.
 
 Context:
