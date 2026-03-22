@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import VerifyButton from '@/components/VerifyButton'
+import KnowledgeUpload from '@/components/KnowledgeUpload'
 
 export default async function AdminPage() {
   const supabase = await createClient()
@@ -15,59 +16,80 @@ export default async function AdminPage() {
 
   if (!profile?.is_admin) redirect('/dashboard')
 
-  const { data: lawyers, error } = await supabase
+  const { data: lawyers } = await supabase
     .from('lawyer_profiles')
     .select('*')
     .order('verified', { ascending: true })
 
-  console.log('Lawyers:', lawyers, 'Error:', error)
+  const { data: knowledgeSources } = await supabase
+    .from('knowledge_chunks')
+    .select('source')
+
+  const uniqueSources = [...new Set(knowledgeSources?.map(k => k.source) || [])]
 
   return (
-    <div className="max-w-4xl mx-auto p-8 space-y-6">
-      <h1 className="text-2xl font-bold">Admin — Lawyer Verification</h1>
+    <div className="max-w-4xl mx-auto p-8 space-y-12">
+      <h1 className="text-2xl font-bold">Admin Panel</h1>
 
-      {!lawyers || lawyers.length === 0 && (
-        <p className="text-slate-400">No lawyer profiles yet.</p>
-      )}
+      {/* Knowledge Base Section */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold border-b pb-2">Knowledge Base</h2>
+        <div className="space-y-2">
+          <p className="text-sm text-slate-500">Uploaded sources:</p>
+          {uniqueSources.length === 0 && (
+            <p className="text-sm text-slate-400">No documents uploaded yet.</p>
+          )}
+          {uniqueSources.map(source => (
+            <span key={source} className="inline-block text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded mr-2">
+              {source}
+            </span>
+          ))}
+        </div>
+        <KnowledgeUpload />
+      </section>
 
-      <div className="space-y-4">
-        {lawyers?.map(lawyer => (
-          <div key={lawyer.id} className="border rounded-lg p-6 space-y-3">
-            <div className="flex items-start justify-between">
-              <div>
-                <h2 className="font-semibold">{lawyer.full_name}</h2>
-                <p className="text-sm text-slate-500">Bar Council ID: {lawyer.bar_council_id}</p>
-                <p className="text-sm text-slate-500">Rate: ₹{lawyer.hourly_rate}/hr</p>
+      {/* Lawyer Verification Section */}
+      <section className="space-y-4">
+        <h2 className="text-xl font-semibold border-b pb-2">Lawyer Verification</h2>
+        {!lawyers || lawyers.length === 0 && (
+          <p className="text-slate-400">No lawyer profiles yet.</p>
+        )}
+        <div className="space-y-4">
+          {lawyers?.map(lawyer => (
+            <div key={lawyer.id} className="border rounded-lg p-6 space-y-3">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 className="font-semibold">{lawyer.full_name}</h2>
+                  <p className="text-sm text-slate-500">Bar Council ID: {lawyer.bar_council_id}</p>
+                  <p className="text-sm text-slate-500">Rate: ₹{lawyer.hourly_rate}/hr</p>
+                </div>
+                <span className={`text-xs px-2 py-1 rounded-full ${
+                  lawyer.verified
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-yellow-100 text-yellow-700'
+                }`}>
+                  {lawyer.verified ? '✓ Verified' : 'Pending'}
+                </span>
               </div>
-              <span className={`text-xs px-2 py-1 rounded-full ${
-                lawyer.verified
-                  ? 'bg-green-100 text-green-700'
-                  : 'bg-yellow-100 text-yellow-700'
-              }`}>
-                {lawyer.verified ? '✓ Verified' : 'Pending'}
-              </span>
+              {lawyer.specialization?.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {lawyer.specialization.map((s: string) => (
+                    <span key={s} className="text-xs bg-slate-100 px-2 py-1 rounded">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              )}
+              {lawyer.bio && (
+                <p className="text-sm text-slate-600">{lawyer.bio}</p>
+              )}
+              {!lawyer.verified && (
+                <VerifyButton lawyerId={lawyer.id} />
+              )}
             </div>
-
-            {lawyer.specialization?.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {lawyer.specialization.map((s: string) => (
-                  <span key={s} className="text-xs bg-slate-100 px-2 py-1 rounded">
-                    {s}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {lawyer.bio && (
-              <p className="text-sm text-slate-600">{lawyer.bio}</p>
-            )}
-
-            {!lawyer.verified && (
-              <VerifyButton lawyerId={lawyer.id} />
-            )}
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

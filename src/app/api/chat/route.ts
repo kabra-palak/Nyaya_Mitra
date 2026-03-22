@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { generateEmbedding } from '@/lib/embeddings'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
@@ -13,13 +14,25 @@ export async function POST(request: NextRequest) {
     const { question, history, sessionId } = await request.json()
     if (!question) return NextResponse.json({ error: 'Missing question' }, { status: 400 })
 
+    // Search knowledge base
+    const queryEmbedding = await generateEmbedding(question)
+    const { data: knowledgeChunks } = await supabase.rpc('match_knowledge_chunks', {
+      query_embedding: queryEmbedding,
+      match_count: 3,
+    })
+
+    const knowledgeContext = knowledgeChunks?.map((c: any) => `[${c.source}]: ${c.content}`).join('\n\n') || ''
+
+    const systemInstruction = `You are Nyaya Mitra, an expert AI legal assistant specializing in Indian law.
+You help users understand their legal rights, explain legal concepts in simple language,
+and provide guidance on legal procedures. Always clarify that your responses are for
+informational purposes only and not a substitute for professional legal advice.
+Always respond in the same language the user wrote in. If the user writes in English, respond in English. Only switch to Hindi or other Indian languages if the user explicitly writes in that language.
+${knowledgeContext ? `\nUse this legal knowledge base context where relevant:\n${knowledgeContext}` : ''}`
+
     const model = genAI.getGenerativeModel({
       model: 'gemini-3.1-flash-lite-preview',
-      systemInstruction: `You are Nyaya Mitra, an expert AI legal assistant specializing in Indian law. 
-You help users understand their legal rights, explain legal concepts in simple language, 
-and provide guidance on legal procedures. Always clarify that your responses are for 
-informational purposes only and not a substitute for professional legal advice.
-Always respond in the same language the user wrote in. If the user writes in English, respond in English. Only switch to Hindi or other Indian languages if the user explicitly writes in that language.`,
+      systemInstruction,
     })
 
     const chat = model.startChat({

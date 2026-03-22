@@ -16,28 +16,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing question or documentId' }, { status: 400 })
     }
 
-    // Generate embedding for the question
     const queryEmbedding = await generateEmbedding(question)
 
-    // Find relevant chunks
-    const { data: chunks, error: searchError } = await supabase.rpc('match_document_chunks', {
+    // Search user document chunks
+    const { data: docChunks } = await supabase.rpc('match_document_chunks', {
       query_embedding: queryEmbedding,
       match_document_id: documentId,
       match_count: 5,
     })
 
-    if (searchError) {
-      return NextResponse.json({ error: searchError.message }, { status: 500 })
-    }
+    // Search knowledge base chunks
+    const { data: knowledgeChunks } = await supabase.rpc('match_knowledge_chunks', {
+      query_embedding: queryEmbedding,
+      match_count: 3,
+    })
 
-    const context = chunks.map((c: any) => c.content).join('\n\n')
+    const docContext = docChunks?.map((c: any) => c.content).join('\n\n') || ''
+    const knowledgeContext = knowledgeChunks?.map((c: any) => `[${c.source}]: ${c.content}`).join('\n\n') || ''
 
-    // Generate answer using Gemini
     const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite-preview' })
-    const prompt = `You are a legal assistant. Use the following context from a legal document to answer the question. If the answer is not in the context, say so.
+    const prompt = `You are a legal assistant. Use the following context to answer the question.
 
-Context:
-${context}
+Document Context:
+${docContext}
+
+${knowledgeContext ? `Legal Knowledge Base:\n${knowledgeContext}` : ''}
 
 Question: ${question}
 
@@ -46,7 +49,6 @@ Answer:`
     const result = await model.generateContent(prompt)
     const answer = result.response.text()
 
-    // Save to chat history
     await supabase.from('chat_messages').insert([
       { user_id: user.id, document_id: documentId, role: 'user', content: question },
       { user_id: user.id, document_id: documentId, role: 'assistant', content: answer },
