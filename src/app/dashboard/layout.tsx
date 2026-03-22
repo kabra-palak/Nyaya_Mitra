@@ -14,11 +14,12 @@ export default async function DashboardLayout({
 
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('role')
+    .select('role, is_admin')
     .eq('id', user.id)
     .single()
 
   const isLawyer = profile?.role === 'lawyer'
+  const isAdmin = profile?.is_admin === true
 
   return (
     <div className="flex min-h-screen">
@@ -32,6 +33,11 @@ export default async function DashboardLayout({
         {isLawyer && (
           <a href="/dashboard/onboarding" className="px-3 py-2 rounded hover:bg-slate-100 text-blue-600">
             My Lawyer Profile
+          </a>
+        )}
+        {isAdmin && (
+          <a href="/admin" className="px-3 py-2 rounded hover:bg-slate-100 text-purple-600">
+            Admin Panel
           </a>
         )}
         <div className="mt-auto space-y-2">

@@ -1,14 +1,32 @@
 'use client'
 
-import { useState, use } from 'react'
+import { useState, useEffect, use } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { createClient } from '@/lib/supabase/client'
 
 export default function DocumentChatPage({ params }: { params: Promise<{ documentId: string }> }) {
   const { documentId } = use(params)
   const [question, setQuestion] = useState('')
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([])
   const [loading, setLoading] = useState(false)
+  const [loadingHistory, setLoadingHistory] = useState(true)
+
+  const supabase = createClient()
+
+  useEffect(() => {
+    async function loadHistory() {
+      const { data } = await supabase
+        .from('chat_messages')
+        .select('role, content')
+        .eq('document_id', documentId)
+        .order('created_at', { ascending: true })
+
+      if (data) setMessages(data)
+      setLoadingHistory(false)
+    }
+    loadHistory()
+  }, [documentId])
 
   async function handleAsk() {
     if (!question.trim()) return
@@ -40,24 +58,28 @@ export default function DocumentChatPage({ params }: { params: Promise<{ documen
       <h1 className="text-2xl font-bold mb-4">Chat with Document</h1>
 
       <div className="flex-1 overflow-y-auto space-y-4 border rounded-lg p-4 mb-4">
-        {messages.length === 0 && (
+        {loadingHistory && (
+          <p className="text-slate-400 text-center mt-8">Loading chat history...</p>
+        )}
+        {!loadingHistory && messages.length === 0 && (
           <p className="text-slate-400 text-center mt-8">Ask anything about your document...</p>
         )}
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
-  className={`max-w-[80%] rounded-lg px-4 py-2 text-sm ${
-    msg.role === 'user' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-900'
-  }`}
-  dangerouslySetInnerHTML={{
-    __html: msg.role === 'assistant'
-      ? msg.content
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-          .replace(/\n/g, '<br/>')
-      : msg.content
-  }}
-/>
+              className={`max-w-[80%] rounded-lg px-4 py-2 text-sm ${
+                msg.role === 'user' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-900'
+              }`}
+              dangerouslySetInnerHTML={{
+                __html: msg.role === 'assistant'
+                  ? msg.content
+                      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                      .replace(/###\s?(.*?)\n/g, '<h3 class="font-bold mt-2">$1</h3>')
+                      .replace(/\n/g, '<br/>')
+                  : msg.content
+              }}
+            />
           </div>
         ))}
         {loading && (
