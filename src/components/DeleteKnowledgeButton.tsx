@@ -1,16 +1,14 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-export default function DeleteKnowledgeButton({ source }: { source: string }) {
-  const router = useRouter()
+export default function DeleteKnowledgeButton({ source, onDelete }: { source: string, onDelete: (source: string) => void }) {
   const supabase = createClient()
 
   async function handleDelete() {
     if (!confirm(`Delete all chunks from "${source}"?`)) return
     await supabase.from('knowledge_chunks').delete().eq('source', source)
-    router.refresh()
+    onDelete(source)
   }
 
   return (
