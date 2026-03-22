@@ -45,11 +45,19 @@ export default function DocumentChatPage({ params }: { params: Promise<{ documen
         )}
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            <div className={`max-w-[80%] rounded-lg px-4 py-2 text-sm ${
-              msg.role === 'user' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-900'
-            }`}>
-              {msg.content}
-            </div>
+            <div
+  className={`max-w-[80%] rounded-lg px-4 py-2 text-sm ${
+    msg.role === 'user' ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-900'
+  }`}
+  dangerouslySetInnerHTML={{
+    __html: msg.role === 'assistant'
+      ? msg.content
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/\n/g, '<br/>')
+      : msg.content
+  }}
+/>
           </div>
         ))}
         {loading && (
