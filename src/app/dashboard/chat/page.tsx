@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { createClient } from '@/lib/supabase/client'
+import DeleteSessionButton from '@/components/DeleteSessionButton'
 
 interface Session {
   id: string
@@ -43,6 +44,15 @@ export default function LegalChatPage() {
       .order('created_at', { ascending: true })
     if (data) setMessages(data)
     setLoadingMessages(false)
+  }
+
+  async function deleteSession(sessionId: string) {
+    await supabase.from('chat_sessions').delete().eq('id', sessionId)
+    setSessions(prev => prev.filter(s => s.id !== sessionId))
+    if (activeSession === sessionId) {
+      setActiveSession(null)
+      setMessages([])
+    }
   }
 
   async function createNewSession() {
@@ -86,7 +96,6 @@ export default function LegalChatPage() {
     if (res.ok) {
       setMessages(prev => [...prev, { role: 'assistant', content: data.answer }])
 
-      // Update session title from first message
       if (messages.length === 0) {
         const title = question.slice(0, 40)
         await supabase
@@ -109,15 +118,17 @@ export default function LegalChatPage() {
         <Button onClick={createNewSession} className="w-full">+ New Chat</Button>
         <div className="flex-1 overflow-y-auto space-y-1">
           {sessions.map(session => (
-            <button
-              key={session.id}
-              onClick={() => loadSession(session.id)}
-              className={`w-full text-left px-3 py-2 rounded text-sm truncate hover:bg-slate-100 ${
-                activeSession === session.id ? 'bg-slate-100 font-medium' : ''
-              }`}
-            >
-              {session.title}
-            </button>
+            <div key={session.id} className={`flex items-center rounded hover:bg-slate-100 ${
+              activeSession === session.id ? 'bg-slate-100' : ''
+            }`}>
+              <button
+                onClick={() => loadSession(session.id)}
+                className="flex-1 text-left px-3 py-2 text-sm truncate"
+              >
+                {session.title}
+              </button>
+              <DeleteSessionButton sessionId={session.id} onDelete={deleteSession} />
+            </div>
           ))}
         </div>
       </div>
