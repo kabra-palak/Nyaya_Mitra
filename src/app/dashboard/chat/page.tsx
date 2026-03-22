@@ -105,19 +105,19 @@ export default function LegalChatPage() {
   ]
 
   return (
-    <div className="flex bg-transparent w-full h-full">
+    <div className="flex bg-transparent w-full h-screen">
       {/* Sessions sidebar */}
       <div className="w-64 bg-transparent flex flex-col overflow-hidden flex-shrink-0">
         <div className="p-4 flex-shrink-0">
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-sm">⚖</span>
             </div>
             <h3 className="text-sm font-bold text-slate-900">Legal Chat</h3>
           </div>
           <button
             onClick={createNewSession}
-            className="w-full bg-indigo-600 text-white border-0 rounded-lg py-2.5 px-3 text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 hover:bg-indigo-700 transition-colors"
+            className="w-full bg-slate-900 text-white border-0 rounded-md py-2.5 px-3 text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
           >
             <span className="text-lg">+</span> New Chat
           </button>
@@ -134,17 +134,17 @@ export default function LegalChatPage() {
           {sessions.map(session => (
             <div
               key={session.id}
-              className={`flex items-center rounded-lg transition-all group ${
+              className={`flex items-center rounded-md transition-all group ${
                 activeSession === session.id
-                  ? 'bg-indigo-50 border border-indigo-200'
+                  ? 'bg-slate-50 border border-slate-200'
                   : 'bg-transparent border border-transparent hover:bg-slate-100'
               }`}
             >
               <button
                 onClick={() => loadSession(session.id)}
-                className={`flex-1 text-left px-3 py-2.5 text-sm rounded-lg cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap font-medium transition-colors ${
+                className={`flex-1 text-left px-3 py-2.5 text-sm rounded-md cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap font-medium transition-colors ${
                   activeSession === session.id
-                    ? 'text-indigo-700 font-semibold'
+                    ? 'text-slate-900 font-semibold'
                     : 'text-slate-700 group-hover:text-slate-900'
                 }`}
                 title={session.title}
@@ -169,9 +169,9 @@ export default function LegalChatPage() {
             <h1 className="text-lg font-bold text-slate-900">
               {activeSession ? sessions.find(s => s.id === activeSession)?.title || 'Legal Chat' : 'Legal Chat'}
             </h1>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">Powered by Nyaya Mitra AI · Indian Law</p>
+            <p className="text-xs text-slate-600 font-medium mt-0.5">Powered by Nyaya Mitra AI · Indian Law</p>
           </div>
-          <div className="text-indigo-600 text-xs font-semibold">
+          <div className="text-slate-600 text-xs font-semibold">
             ⚖️ AI Legal Assistant
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function LegalChatPage() {
           {!activeSession && (
             <div className="flex flex-col items-center justify-center flex-1 gap-8 py-12">
               <div className="text-center max-w-md">
-                <div className="w-20 h-20 rounded-full bg-indigo-100 flex items-center justify-center text-4xl mx-auto mb-6">
+                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center text-4xl mx-auto mb-6">
                   ⚖️
                 </div>
                 <h2 className="text-3xl font-bold text-slate-900 mb-3">
@@ -201,7 +201,7 @@ export default function LegalChatPage() {
                       await createNewSession()
                       setQuestion(q)
                     }}
-                    className="bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-700 font-medium text-left hover:border-indigo-400 hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-md transition-all leading-snug"
+                    className="bg-white border border-slate-200 rounded-md px-4 py-3 text-sm text-slate-700 font-medium text-left hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 hover:shadow-sm transition-all leading-snug"
                   >
                     {q}
                   </button>
@@ -220,14 +220,14 @@ export default function LegalChatPage() {
           {messages.map((msg, i) => (
             <div key={i} className={`flex items-end gap-3 animate-in fade-in duration-300 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'assistant' && (
-                <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                   ⚖️
                 </div>
               )}
               <div
                 className={`max-w-xl rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                   msg.role === 'user'
-                    ? 'bg-indigo-600 text-white rounded-br-none'
+                    ? 'bg-slate-900 text-white rounded-br-none'
                     : 'bg-white text-slate-900 border border-slate-200 rounded-bl-none'
                 }`}
                 dangerouslySetInnerHTML={{
@@ -245,7 +245,7 @@ export default function LegalChatPage() {
 
           {loading && (
             <div className="flex gap-3 items-end animate-in fade-in duration-300">
-              <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
                 ⚖️
               </div>
               <div className="bg-white border border-slate-200 rounded-2xl rounded-bl-none px-4 py-3 text-slate-600 text-sm">
@@ -268,15 +268,15 @@ export default function LegalChatPage() {
             onKeyDown={e => e.key === 'Enter' && !loading && handleAsk()}
             placeholder={activeSession ? 'Ask a legal question...' : 'Start a new chat first...'}
             disabled={loading || !activeSession}
-            className="flex-1 border border-slate-300 rounded-lg px-4 py-3 text-sm bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
+            className="flex-1 border border-slate-200 rounded-md px-4 py-3 text-sm bg-white text-slate-900 placeholder-slate-400 outline-none focus:border-slate-300 focus:ring-2 focus:ring-slate-100 transition-all disabled:bg-slate-50 disabled:text-slate-400 disabled:cursor-not-allowed"
           />
           <button
             onClick={handleAsk}
             disabled={loading || !question.trim() || !activeSession}
-            className={`py-3 px-5 font-semibold rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+            className={`py-3 px-5 font-semibold rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
               loading || !question.trim() || !activeSession
                 ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                : 'bg-slate-900 text-white hover:bg-slate-800'
             }`}
           >
             Send →

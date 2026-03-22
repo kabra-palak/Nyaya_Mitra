@@ -73,7 +73,7 @@ export default function AdminPage() {
           <div className="flex items-center justify-between mb-6">
             <div>
               <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-slate-900 rounded-md flex items-center justify-center">
                   <span className="text-white font-bold text-lg">⚖</span>
                 </div>
                 <h1 className="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
@@ -82,7 +82,7 @@ export default function AdminPage() {
             </div>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-lg hover:bg-red-50 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-red-500 border border-red-200 rounded-md hover:bg-red-50 transition-colors"
             >
               Logout
             </button>
@@ -93,7 +93,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab('knowledge')}
               className={`px-6 py-3 font-semibold text-sm transition-all border-b-2 ${
                 activeTab === 'knowledge'
-                  ? 'border-indigo-600 text-indigo-600'
+                  ? 'border-slate-900 text-slate-900'
                   : 'border-transparent text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -103,7 +103,7 @@ export default function AdminPage() {
               onClick={() => setActiveTab('lawyers')}
               className={`px-6 py-3 font-semibold text-sm transition-all border-b-2 ${
                 activeTab === 'lawyers'
-                  ? 'border-indigo-600 text-indigo-600'
+                  ? 'border-slate-900 text-slate-900'
                   : 'border-transparent text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -117,19 +117,19 @@ export default function AdminPage() {
         {/* Knowledge Base Tab */}
         {activeTab === 'knowledge' && (
           <section className="space-y-8">
-            <div className="bg-white rounded-xl border border-slate-200 p-6">
+            <div className="bg-white rounded-md border border-slate-200 p-6">
               <div className="text-slate-600 text-sm font-medium mb-1">Total Documents</div>
-              <div className="text-4xl font-bold text-indigo-600">{sources.length}</div>
+              <div className="text-4xl font-bold text-slate-900">{sources.length}</div>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 p-8">
+            <div className="bg-white rounded-md border border-slate-200 p-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Uploaded Sources</h2>
               {sources.length === 0 ? (
-                <p className="text-slate-500 text-center py-8">No documents uploaded yet.</p>
+                <p className="text-slate-600 text-center py-8">No documents uploaded yet.</p>
               ) : (
                 <div className="grid gap-3">
                   {sources.map(source => (
-                    <div key={source} className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg p-4">
+                    <div key={source} className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-md p-4">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">📄</span>
                         <span className="font-medium text-slate-900">{source}</span>
@@ -141,7 +141,7 @@ export default function AdminPage() {
               )}
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 p-8">
+            <div className="bg-white rounded-md border border-slate-200 p-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Add New Document</h2>
               <KnowledgeUpload />
             </div>
@@ -152,28 +152,28 @@ export default function AdminPage() {
         {activeTab === 'lawyers' && (
           <section className="space-y-8">
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <div className="bg-white rounded-md border border-slate-200 p-6">
                 <div className="text-slate-600 text-sm font-medium mb-1">Total Lawyers</div>
                 <div className="text-3xl font-bold text-slate-900">{lawyers.length}</div>
               </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <div className="bg-white rounded-md border border-slate-200 p-6">
                 <div className="text-green-600 text-sm font-medium mb-1">Verified</div>
                 <div className="text-3xl font-bold text-green-600">{verifiedCount}</div>
               </div>
-              <div className="bg-white rounded-xl border border-slate-200 p-6">
+              <div className="bg-white rounded-md border border-slate-200 p-6">
                 <div className="text-amber-600 text-sm font-medium mb-1">Pending</div>
                 <div className="text-3xl font-bold text-amber-600">{pendingCount}</div>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 p-8">
+            <div className="bg-white rounded-md border border-slate-200 p-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-6">Lawyer Profiles</h2>
               {lawyers.length === 0 ? (
-                <p className="text-slate-500 text-center py-12">No lawyer profiles yet.</p>
+                <p className="text-slate-600 text-center py-12">No lawyer profiles yet.</p>
               ) : (
                 <div className="space-y-4">
                   {lawyers.map(lawyer => (
-                    <div key={lawyer.id} className={`border-2 rounded-xl p-6 transition-all ${
+                    <div key={lawyer.id} className={`border-2 rounded-md p-6 transition-all ${
                       lawyer.verified ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'
                     }`}>
                       <div className="flex items-start justify-between gap-4">

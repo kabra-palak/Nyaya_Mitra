@@ -139,12 +139,12 @@ export default function LawyerOnboarding() {
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-slate-900 rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-lg">⚖</span>
             </div>
             <div>
               <h1 className="text-2xl font-bold text-slate-900">Nyaya Mitra</h1>
-              <p className="text-xs text-slate-500">Lawyer Onboarding</p>
+              <p className="text-xs text-slate-600">Lawyer Onboarding</p>
             </div>
           </div>
         </div>
@@ -153,7 +153,7 @@ export default function LawyerOnboarding() {
       <div className="max-w-4xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl border border-slate-200 p-6 sticky top-6">
+            <div className="bg-white rounded-md border border-slate-200 p-6 sticky top-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-slate-900">Why Join?</h2>
                 {verified ? (
@@ -182,7 +182,7 @@ export default function LawyerOnboarding() {
           </div>
 
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl border border-slate-200 p-8">
+            <div className="bg-white rounded-md border border-slate-200 p-8">
               <div className="mb-8">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-2xl font-bold text-slate-900">
@@ -192,7 +192,7 @@ export default function LawyerOnboarding() {
                 </div>
                 <div className="w-full bg-slate-200 rounded-full h-2">
                   <div
-                    className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
+                    className="bg-slate-900 h-2 rounded-full transition-all duration-300"
                     style={{ width: `${(formStep / 3) * 100}%` }}
                   />
                 </div>
@@ -204,19 +204,19 @@ export default function LawyerOnboarding() {
                     <label className="block text-sm font-semibold text-slate-900 mb-2">Full Name</label>
                     <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange}
                       placeholder="Enter your full name"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-all" />
+                      className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-slate-100 focus:border-slate-300 outline-none transition-all" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-900 mb-2">Bar Council Registration Number</label>
                     <input type="text" name="barRegistration" value={formData.barRegistration} onChange={handleInputChange}
                       placeholder="e.g. D/123/2010"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-all" />
+                      className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-slate-100 focus:border-slate-300 outline-none transition-all" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-900 mb-2">Phone Number</label>
                     <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange}
                       placeholder="98765 43210"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-all" />
+                      className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-slate-100 focus:border-slate-300 outline-none transition-all" />
                   </div>
                 </div>
               )}
@@ -226,7 +226,7 @@ export default function LawyerOnboarding() {
                   <div>
                     <label className="block text-sm font-semibold text-slate-900 mb-2">Years of Experience</label>
                     <select name="yearsOfExperience" value={formData.yearsOfExperience} onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-all">
+                      className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-slate-100 focus:border-slate-300 outline-none transition-all">
                       <option value="">Select years of experience</option>
                       <option value="0-2">0-2 years</option>
                       <option value="2-5">2-5 years</option>
@@ -238,17 +238,17 @@ export default function LawyerOnboarding() {
                     <label className="block text-sm font-semibold text-slate-900 mb-2">Hourly Rate (₹)</label>
                     <input type="number" name="hourlyRate" value={formData.hourlyRate} onChange={handleInputChange}
                       placeholder="e.g. 2500"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-all" />
+                      className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-slate-100 focus:border-slate-300 outline-none transition-all" />
                   </div>
                   <div>
                     <label className="block text-sm font-semibold text-slate-900 mb-3">Specializations</label>
                     <div className="grid grid-cols-2 gap-3">
                       {specializations.map(spec => (
                         <button key={spec} type="button" onClick={() => handleSpecializationToggle(spec)}
-                          className={`px-4 py-2.5 rounded-lg border-2 font-medium transition-all text-sm ${
+                          className={`px-4 py-2.5 rounded-md border-2 font-medium transition-all text-sm ${
                             formData.specializations.includes(spec)
-                              ? 'bg-indigo-50 border-indigo-600 text-indigo-700'
-                              : 'bg-white border-slate-300 text-slate-700 hover:border-indigo-300'
+                              ? 'bg-slate-50 border-slate-900 text-slate-900'
+                              : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300'
                           }`}>
                           {spec}
                         </button>
@@ -259,7 +259,7 @@ export default function LawyerOnboarding() {
                     <label className="block text-sm font-semibold text-slate-900 mb-2">Location / City</label>
                     <input type="text" name="location" value={formData.location} onChange={handleInputChange}
                       placeholder="e.g. Mumbai, Maharashtra"
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-all" />
+                      className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-slate-100 focus:border-slate-300 outline-none transition-all" />
                   </div>
                 </div>
               )}
@@ -271,8 +271,8 @@ export default function LawyerOnboarding() {
                     <textarea name="description" value={formData.description} onChange={handleInputChange}
                       placeholder="Tell clients about your experience, approach, and why they should choose you..."
                       rows={6}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-200 focus:border-indigo-500 outline-none transition-all resize-none" />
-                    <p className="text-xs text-slate-500 mt-1">{formData.description.length}/500 characters</p>
+                      className="w-full px-4 py-3 border border-slate-200 rounded-md focus:ring-2 focus:ring-slate-100 focus:border-slate-300 outline-none transition-all resize-none" />
+                    <p className="text-xs text-slate-600 mt-1">{formData.description.length}/500 characters</p>
                   </div>
                 </div>
               )}
@@ -286,19 +286,19 @@ export default function LawyerOnboarding() {
               <div className="flex gap-4 mt-8 pt-6 border-t border-slate-200">
                 {formStep > 1 && (
                   <button onClick={() => setFormStep(formStep - 1)}
-                    className="px-6 py-3 border border-slate-300 rounded-lg text-slate-900 font-semibold hover:bg-slate-50 transition-colors">
+                    className="px-6 py-3 border border-slate-200 rounded-md text-slate-900 font-semibold hover:bg-slate-50 transition-colors">
                     ← Back
                   </button>
                 )}
                 {formStep < 3 ? (
                   <button onClick={() => setFormStep(formStep + 1)}
-                    className="ml-auto px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
+                    className="ml-auto px-6 py-3 bg-slate-900 text-white rounded-md font-semibold hover:bg-slate-800 transition-colors">
                     Continue →
                   </button>
                 ) : (
                   <button onClick={handleCompleteOnboarding} disabled={isSubmitting}
-                    className={`ml-auto px-8 py-3 rounded-lg font-semibold transition-colors ${
-                      isSubmitting ? 'bg-slate-400 text-white cursor-not-allowed' : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                    className={`ml-auto px-8 py-3 rounded-md font-semibold transition-colors ${
+                      isSubmitting ? 'bg-slate-400 text-white cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-slate-800'
                     }`}>
                     {isSubmitting ? (
                       <span className="flex items-center gap-2">
@@ -317,8 +317,8 @@ export default function LawyerOnboarding() {
               )}
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-6">
-              <p className="text-sm text-blue-900">
+            <div className="bg-slate-50 border border-slate-200 rounded-md p-4 mt-6">
+              <p className="text-sm text-slate-700">
                 <span className="font-semibold">ℹ️ Verification:</span> All lawyers are verified through their Bar Council registration. Your profile will appear in the directory after admin approval.
               </p>
             </div>

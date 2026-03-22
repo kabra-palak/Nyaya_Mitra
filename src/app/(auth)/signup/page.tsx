@@ -34,12 +34,12 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6 hover:opacity-80 transition-opacity">
-            <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-slate-900 rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-sm">⚖</span>
             </div>
             <span className="text-xl font-bold text-slate-900">Nyaya Mitra</span>
@@ -49,26 +49,26 @@ export default function SignupPage() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-lg p-8 space-y-6">
+        <div className="bg-white rounded-md border border-slate-200 p-8 space-y-6">
           <div className="space-y-3">
             <Label className="text-slate-900 font-semibold block">I am a...</Label>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setRole('client')}
-                className={`py-3 px-4 rounded-lg font-semibold border-2 transition-all ${
-                  role === 'client' 
-                    ? 'bg-indigo-600 text-white border-indigo-600' 
-                    : 'bg-white text-slate-900 border-slate-300 hover:border-indigo-300'
+                className={`py-3 px-4 rounded-md font-semibold border-2 transition-all ${
+                  role === 'client'
+                    ? 'bg-slate-900 text-white border-slate-900'
+                    : 'bg-white text-slate-900 border-slate-200 hover:border-slate-300'
                 }`}
               >
                 👤 Individual
               </button>
               <button
                 onClick={() => setRole('lawyer')}
-                className={`py-3 px-4 rounded-lg font-semibold border-2 transition-all ${
-                  role === 'lawyer' 
-                    ? 'bg-indigo-600 text-white border-indigo-600' 
-                    : 'bg-white text-slate-900 border-slate-300 hover:border-indigo-300'
+                className={`py-3 px-4 rounded-md font-semibold border-2 transition-all ${
+                  role === 'lawyer'
+                    ? 'bg-slate-900 text-white border-slate-900'
+                    : 'bg-white text-slate-900 border-slate-200 hover:border-slate-300'
                 }`}
               >
                 ⚖️ Lawyer
@@ -78,44 +78,44 @@ export default function SignupPage() {
 
           <div className="space-y-2">
             <Label className="text-slate-900 font-semibold">Email Address</Label>
-            <Input 
-              value={email} 
-              onChange={e => setEmail(e.target.value)} 
-              type="email" 
+            <Input
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              type="email"
               placeholder="you@example.com"
-              className="px-4 py-2.5 border border-slate-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all"
+              className="px-4 py-2.5 border border-slate-200 rounded-md focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-all"
             />
           </div>
 
           <div className="space-y-2">
             <Label className="text-slate-900 font-semibold">Password</Label>
-            <Input 
-              value={password} 
-              onChange={e => setPassword(e.target.value)} 
-              type="password" 
+            <Input
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              type="password"
               placeholder="Create a strong password"
-              className="px-4 py-2.5 border border-slate-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all"
+              className="px-4 py-2.5 border border-slate-200 rounded-md focus:border-slate-400 focus:ring-2 focus:ring-slate-100 transition-all"
             />
           </div>
 
-          {error && <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">{error}</div>}
-          
-          <Button 
-            onClick={handleSignup} 
-            disabled={loading} 
-            className="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+          {error && <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">{error}</div>}
+
+          <Button
+            onClick={handleSignup}
+            disabled={loading}
+            className="w-full py-2.5 bg-slate-900 text-white font-semibold rounded-md hover:bg-slate-800 transition-colors disabled:opacity-50"
           >
             {loading ? 'Creating account...' : 'Create Account'}
           </Button>
 
-          <p className="text-xs text-slate-500 text-center">
+          <p className="text-xs text-slate-600 text-center">
             By signing up, you agree to our terms of service
           </p>
         </div>
 
         {/* Footer */}
         <p className="text-center mt-6 text-slate-600">
-          Already have an account? <Link href="/login" className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors">Sign in</Link>
+          Already have an account? <Link href="/login" className="text-slate-900 font-semibold hover:text-slate-700 transition-colors">Sign in</Link>
         </p>
       </div>
     </div>

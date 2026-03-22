@@ -82,16 +82,16 @@ export default function FormsPage() {
     return (
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">Form Assistant</h1>
-        <p className="text-slate-500">Select a legal form to get started.</p>
+        <p className="text-slate-600">Select a legal form to get started.</p>
         <div className="grid grid-cols-2 gap-4">
           {FORM_TYPES.map(form => (
             <button
               key={form.id}
               onClick={() => { setSelectedForm(form.id); setStep(0); setAnswers({}) }}
-              className="p-6 border rounded-lg text-left hover:bg-slate-50 space-y-1"
+              className="p-6 border border-slate-200 rounded-md text-left hover:border-slate-300 hover:bg-white space-y-1"
             >
               <h2 className="font-semibold">{form.label}</h2>
-              <p className="text-sm text-slate-500">{form.description}</p>
+              <p className="text-sm text-slate-600">{form.description}</p>
             </button>
           ))}
         </div>
@@ -105,7 +105,7 @@ export default function FormsPage() {
       <div className="space-y-6">
         <h1 className="text-2xl font-bold">Generated Form</h1>
         <div
-          className="border rounded-lg p-8 text-sm bg-white leading-relaxed"
+          className="border border-slate-200 rounded-md p-8 text-sm bg-white leading-relaxed"
           dangerouslySetInnerHTML={{ __html: renderMarkdown(generatedForm) }}
         />
         <div className="flex gap-4">
@@ -146,7 +146,7 @@ export default function FormsPage() {
       <h1 className="text-2xl font-bold">
         {FORM_TYPES.find(f => f.id === selectedForm)?.label}
       </h1>
-      <p className="text-slate-500">Step {step + 1} of {currentQuestions.length}</p>
+      <p className="text-slate-600">Step {step + 1} of {currentQuestions.length}</p>
 
       <div className="space-y-2">
         <Label>{currentQuestion.label}</Label>

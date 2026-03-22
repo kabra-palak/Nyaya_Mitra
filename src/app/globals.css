@@ -1,25 +1,46 @@
 @import "tailwindcss";
 
 :root {
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  /* GitHub Light Theme - Primary Colors */
+  --background: #f6f8fa;
+  --foreground: #24292e;
+  
+  /* Card and Panel Backgrounds */
+  --card: #ffffff;
+  --card-foreground: #24292e;
+  
+  /* Popover */
+  --popover: #ffffff;
+  --popover-foreground: #24292e;
+  
+  /* Primary (Deep Navy) */
+  --primary: #24292e;
+  --primary-foreground: #ffffff;
+  
+  /* Secondary (Neutral Gray) */
+  --secondary: #f6f8fa;
+  --secondary-foreground: #24292e;
+  
+  /* Muted (Light Gray) */
+  --muted: #eaeef2;
+  --muted-foreground: #57606a;
+  
+  /* Accent (Neutral) */
+  --accent: #ffffff;
+  --accent-foreground: #24292e;
+  
+  /* Destructive (Error Red) */
+  --destructive: #da3633;
+  
+  /* Borders and Inputs */
+  --border: #d0d7de;
+  --input: #ffffff;
+  
+  /* Focus Ring */
+  --ring: #24292e;
+  
+  /* Border Radius */
+  --radius: 0.375rem;
 }
 
 @layer base {

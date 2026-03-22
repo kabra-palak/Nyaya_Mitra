@@ -2,20 +2,20 @@ import Link from 'next/link'
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen flex flex-col bg-slate-50">
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-5 border-b border-slate-200 bg-white shadow-sm">
+      <nav className="flex items-center justify-between px-8 py-5 border-b border-slate-200 bg-white">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg flex items-center justify-center">
+          <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">⚖</span>
           </div>
           <h1 className="text-2xl font-bold text-slate-900">Nyaya Mitra</h1>
         </div>
         <div className="flex gap-3">
-          <Link href="/login" className="text-sm px-5 py-2.5 text-slate-700 font-medium rounded-lg hover:bg-slate-100 transition-colors">
+          <Link href="/login" className="text-sm px-5 py-2.5 text-slate-600 font-medium rounded-md hover:bg-slate-100 transition-colors">
             Login
           </Link>
-          <Link href="/signup" className="text-sm px-5 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm">
+          <Link href="/signup" className="text-sm px-5 py-2.5 bg-slate-900 text-white font-medium rounded-md hover:bg-slate-800 transition-colors">
             Get Started
           </Link>
         </div>
@@ -24,7 +24,7 @@ export default function HomePage() {
       {/* Hero */}
       <main className="flex-1 flex flex-col items-center justify-center text-center px-8 space-y-8 py-20">
         <div className="max-w-3xl space-y-6">
-          <div className="inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
+          <div className="inline-block px-4 py-1.5 bg-slate-100 text-slate-700 rounded-full text-sm font-medium">
             🚀 Introducing Your Legal Intelligence Partner
           </div>
           <h2 className="text-6xl font-bold text-slate-900 leading-tight">
@@ -48,7 +48,7 @@ export default function HomePage() {
               { icon: '⚖️', title: 'Find Lawyers', desc: 'Connect with verified legal professionals instantly' },
               { icon: '📝', title: 'Form Assistant', desc: 'Generate legal forms with AI guidance' },
             ].map(f => (
-              <div key={f.title} className="p-6 bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 rounded-xl hover:border-indigo-300 hover:shadow-lg transition-all">
+              <div key={f.title} className="p-6 bg-slate-50 border border-slate-200 rounded-md hover:border-slate-300 hover:shadow-sm transition-all">
                 <div className="text-4xl mb-4">{f.icon}</div>
                 <h4 className="font-bold text-lg text-slate-900 mb-2">{f.title}</h4>
                 <p className="text-sm text-slate-600">{f.desc}</p>
@@ -59,7 +59,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="text-center py-8 border-t border-slate-200 bg-white text-sm text-slate-500">
+      <footer className="text-center py-8 border-t border-slate-200 bg-white text-sm text-slate-600">
         <p>© 2026 Nyaya Mitra. For informational purposes only. Not a substitute for proper legal advice.</p>
       </footer>
     </div>

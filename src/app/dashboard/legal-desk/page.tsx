@@ -128,7 +128,7 @@ export default function LegalDeskPage() {
       </div>
 
       {/* Upload Section */}
-      <div className="bg-white rounded-xl border-2 shadow-lg overflow-hidden">
+      <div className="bg-white rounded-md border border-slate-200 overflow-hidden">
         <div
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -149,30 +149,30 @@ export default function LegalDeskPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className={`w-full border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer group ${
+                  className={`w-full border-2 border-dashed rounded-md p-8 text-center transition-all cursor-pointer group ${
                     dragActive
-                      ? 'border-indigo-500 bg-indigo-50'
-                      : 'border-indigo-300 hover:border-indigo-500 hover:bg-indigo-50'
+                      ? 'border-slate-400 bg-slate-50'
+                      : 'border-slate-300 hover:border-slate-400 hover:bg-slate-50'
                   }`}
                 >
                   <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">📄</div>
-                  <p className="font-semibold text-indigo-600 group-hover:text-indigo-700 mb-1 text-lg">Choose File</p>
+                  <p className="font-semibold text-slate-700 group-hover:text-slate-800 mb-1 text-lg">Choose File</p>
                   <p className="text-sm text-slate-600">Or drag and drop here</p>
-                  <p className="text-xs text-slate-500 mt-2">Supported: PDF, DOCX, JPG, PNG (Max 10MB)</p>
+                  <p className="text-xs text-slate-600 mt-2">Supported: PDF, DOCX, JPG, PNG (Max 10MB)</p>
                 </button>
               </>
             ) : (
               <div className="space-y-4">
-                <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 flex items-center gap-3">
+                <div className="bg-slate-50 border border-slate-200 rounded-md p-4 flex items-center gap-3">
                   <span className="text-3xl flex-shrink-0">{getFileIcon(file.name)}</span>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-indigo-900 truncate">{file.name}</p>
-                    <p className="text-xs text-indigo-700">{formatFileSize(file.size)}</p>
+                    <p className="font-semibold text-slate-900 truncate">{file.name}</p>
+                    <p className="text-xs text-slate-600">{formatFileSize(file.size)}</p>
                   </div>
                   <button
                     onClick={() => setFile(null)}
                     type="button"
-                    className="text-indigo-400 hover:text-indigo-600 font-bold text-2xl leading-none flex-shrink-0"
+                    className="text-slate-400 hover:text-slate-600 font-bold text-2xl leading-none flex-shrink-0"
                   >
                     ✕
                   </button>
@@ -181,7 +181,7 @@ export default function LegalDeskPage() {
                 <Button
                   onClick={handleUpload}
                   disabled={!file || uploading}
-                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-all disabled:bg-slate-300 disabled:cursor-not-allowed"
+                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 rounded-md transition-all disabled:bg-slate-300 disabled:cursor-not-allowed"
                 >
                   {uploading ? (
                     <span className="flex items-center justify-center gap-2">
@@ -213,22 +213,22 @@ export default function LegalDeskPage() {
       <div>
         <h2 className="text-2xl font-bold text-slate-900 mb-4">Your Documents</h2>
         {documents.length === 0 && !uploading ? (
-          <div className="text-center py-12 bg-slate-50 rounded-xl border border-slate-200">
-            <p className="text-slate-500 text-lg">No documents yet. Upload your first document to get started.</p>
+          <div className="text-center py-12 bg-slate-50 rounded-md border border-slate-200">
+            <p className="text-slate-600 text-lg">No documents yet. Upload your first document to get started.</p>
           </div>
         ) : (
           <div className="grid gap-3">
             {documents.map((doc) => (
               <Link href={`/dashboard/legal-desk/${doc.id}`} key={doc.id}>
-                <div className="bg-white p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all group cursor-pointer">
+                <div className="bg-white p-4 rounded-md border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all group cursor-pointer">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4 flex-1 min-w-0">
                       <span className="text-2xl flex-shrink-0">{getFileIcon(doc.file_name)}</span>
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
+                        <p className="font-semibold text-slate-900 truncate group-hover:text-slate-700 transition-colors">
                           {doc.file_name}
                         </p>
-                        <p className="text-sm text-slate-500">
+                        <p className="text-sm text-slate-600">
                           {new Date(doc.created_at).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
@@ -238,7 +238,7 @@ export default function LegalDeskPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-3 ml-4">
-                      <span className="text-sm font-medium text-indigo-600 group-hover:text-indigo-700 px-3 py-1 bg-indigo-50 rounded-lg transition-colors">
+                      <span className="text-sm font-medium text-slate-700 group-hover:text-slate-800 px-3 py-1 bg-slate-100 rounded-md transition-colors">
                         💬 Chat
                       </span>
                       <DeleteDocumentButton documentId={doc.id} storagePath={doc.storage_path} />
