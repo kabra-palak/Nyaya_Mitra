@@ -12,6 +12,14 @@ export default async function DashboardLayout({
 
   if (!user) redirect('/login')
 
+  const { data: profile } = await supabase
+    .from('user_profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single()
+
+  const isLawyer = profile?.role === 'lawyer'
+
   return (
     <div className="flex min-h-screen">
       <aside className="w-64 border-r p-4 flex flex-col gap-2">
@@ -21,6 +29,11 @@ export default async function DashboardLayout({
         <a href="/dashboard/chat" className="px-3 py-2 rounded hover:bg-slate-100">Legal Chat</a>
         <a href="/dashboard/lawyers" className="px-3 py-2 rounded hover:bg-slate-100">Find Lawyers</a>
         <a href="/dashboard/forms" className="px-3 py-2 rounded hover:bg-slate-100">Form Assistant</a>
+        {isLawyer && (
+          <a href="/dashboard/onboarding" className="px-3 py-2 rounded hover:bg-slate-100 text-blue-600">
+            My Lawyer Profile
+          </a>
+        )}
         <div className="mt-auto space-y-2">
           <p className="text-sm text-slate-500 px-3">{user.email}</p>
           <LogoutButton />
