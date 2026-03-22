@@ -15,16 +15,18 @@ export default async function AdminPage() {
 
   if (!profile?.is_admin) redirect('/dashboard')
 
-  const { data: lawyers } = await supabase
+  const { data: lawyers, error } = await supabase
     .from('lawyer_profiles')
-    .select('*, user_profiles(full_name, city)')
+    .select('*')
     .order('verified', { ascending: true })
+
+  console.log('Lawyers:', lawyers, 'Error:', error)
 
   return (
     <div className="max-w-4xl mx-auto p-8 space-y-6">
       <h1 className="text-2xl font-bold">Admin — Lawyer Verification</h1>
 
-      {lawyers?.length === 0 && (
+      {!lawyers || lawyers.length === 0 && (
         <p className="text-slate-400">No lawyer profiles yet.</p>
       )}
 
