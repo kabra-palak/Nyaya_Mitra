@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import Link from 'next/link'
 
 export default function SignupPage() {
   const router = useRouter()
@@ -33,40 +34,88 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-md space-y-4 p-8 border rounded-lg">
-        <h1 className="text-2xl font-bold">Create Account</h1>
-        <div className="space-y-2">
-          <Label>I am a...</Label>
-          <div className="flex gap-4">
-            <button
-              onClick={() => setRole('client')}
-              className={`flex-1 py-2 border rounded ${role === 'client' ? 'bg-slate-900 text-white' : ''}`}
-            >
-              Client
-            </button>
-            <button
-              onClick={() => setRole('lawyer')}
-              className={`flex-1 py-2 border rounded ${role === 'lawyer' ? 'bg-slate-900 text-white' : ''}`}
-            >
-              Lawyer
-            </button>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <Link href="/" className="inline-flex items-center gap-2 mb-6 hover:opacity-80 transition-opacity">
+            <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-indigo-700 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">⚖</span>
+            </div>
+            <span className="text-xl font-bold text-slate-900">Nyaya Mitra</span>
+          </Link>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Get Started</h1>
+          <p className="text-slate-600">Join India's legal intelligence platform</p>
+        </div>
+
+        {/* Form Card */}
+        <div className="bg-white rounded-xl border border-slate-200 shadow-lg p-8 space-y-6">
+          <div className="space-y-3">
+            <Label className="text-slate-900 font-semibold block">I am a...</Label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => setRole('client')}
+                className={`py-3 px-4 rounded-lg font-semibold border-2 transition-all ${
+                  role === 'client' 
+                    ? 'bg-indigo-600 text-white border-indigo-600' 
+                    : 'bg-white text-slate-900 border-slate-300 hover:border-indigo-300'
+                }`}
+              >
+                👤 Individual
+              </button>
+              <button
+                onClick={() => setRole('lawyer')}
+                className={`py-3 px-4 rounded-lg font-semibold border-2 transition-all ${
+                  role === 'lawyer' 
+                    ? 'bg-indigo-600 text-white border-indigo-600' 
+                    : 'bg-white text-slate-900 border-slate-300 hover:border-indigo-300'
+                }`}
+              >
+                ⚖️ Lawyer
+              </button>
+            </div>
           </div>
+
+          <div className="space-y-2">
+            <Label className="text-slate-900 font-semibold">Email Address</Label>
+            <Input 
+              value={email} 
+              onChange={e => setEmail(e.target.value)} 
+              type="email" 
+              placeholder="you@example.com"
+              className="px-4 py-2.5 border border-slate-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-slate-900 font-semibold">Password</Label>
+            <Input 
+              value={password} 
+              onChange={e => setPassword(e.target.value)} 
+              type="password" 
+              placeholder="Create a strong password"
+              className="px-4 py-2.5 border border-slate-300 rounded-lg focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all"
+            />
+          </div>
+
+          {error && <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">{error}</div>}
+          
+          <Button 
+            onClick={handleSignup} 
+            disabled={loading} 
+            className="w-full py-2.5 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50"
+          >
+            {loading ? 'Creating account...' : 'Create Account'}
+          </Button>
+
+          <p className="text-xs text-slate-500 text-center">
+            By signing up, you agree to our terms of service
+          </p>
         </div>
-        <div className="space-y-2">
-          <Label>Email</Label>
-          <Input value={email} onChange={e => setEmail(e.target.value)} type="email" placeholder="you@example.com" />
-        </div>
-        <div className="space-y-2">
-          <Label>Password</Label>
-          <Input value={password} onChange={e => setPassword(e.target.value)} type="password" placeholder="••••••••" />
-        </div>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <Button onClick={handleSignup} disabled={loading} className="w-full">
-          {loading ? 'Creating account...' : 'Sign Up'}
-        </Button>
-        <p className="text-sm text-center">
-          Have an account? <a href="/login" className="underline">Login</a>
+
+        {/* Footer */}
+        <p className="text-center mt-6 text-slate-600">
+          Already have an account? <Link href="/login" className="text-indigo-600 font-semibold hover:text-indigo-700 transition-colors">Sign in</Link>
         </p>
       </div>
     </div>

@@ -1,18 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import Link from 'next/link' // Added this import
+import { useState, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import DeleteDocumentButton from '@/components/DeleteDocumentButton'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 
-// Added a basic interface for better type safety than 'any'
 interface Document {
   id: string
   file_name: string
   created_at: string
   storage_path: string
-
 }
 
 export default function LegalDeskPage() {
@@ -20,6 +18,8 @@ export default function LegalDeskPage() {
   const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
   const [documents, setDocuments] = useState<Document[]>([])
+  const [dragActive, setDragActive] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const supabase = createClient()
 
@@ -45,6 +45,26 @@ export default function LegalDeskPage() {
     if (selected) setFile(selected)
   }
 
+  function handleDrag(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    e.stopPropagation()
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true)
+    } else if (e.type === 'dragleave') {
+      setDragActive(false)
+    }
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    e.stopPropagation()
+    setDragActive(false)
+    const files = e.dataTransfer.files
+    if (files && files[0]) {
+      setFile(files[0])
+    }
+  }
+
   async function handleUpload() {
     if (!file) return
     setUploading(true)
@@ -63,8 +83,8 @@ export default function LegalDeskPage() {
 
       if (res.ok) {
         setMessage(`✅ Uploaded: ${data.fileName}`)
-        setFile(null) // Reset file input
-        fetchDocuments() // Refresh list
+        setFile(null)
+        fetchDocuments()
       } else {
         setMessage(`❌ Error: ${data.error}`)
       }
@@ -75,55 +95,160 @@ export default function LegalDeskPage() {
     }
   }
 
-  return (
-    <div className="space-y-6 p-6">
-      <h1 className="text-2xl font-bold">Legal Desk</h1>
-      <p className="text-slate-500">Upload a PDF, Word doc, or image to analyze.</p>
+  const getFileIcon = (fileName: string) => {
+    const ext = fileName.split('.').pop()?.toLowerCase()
+    switch (ext) {
+      case 'pdf':
+        return '📄'
+      case 'docx':
+      case 'doc':
+        return '📝'
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+        return '🖼️'
+      default:
+        return '📎'
+    }
+  }
 
-      <div className="border-2 border-dashed rounded-lg p-8 text-center space-y-4">
-        <p className="text-slate-400">Supported: PDF, DOCX, JPG, PNG</p>
-        <input
-          type="file"
-          accept=".pdf,.docx,.jpg,.jpeg,.png"
-          onChange={handleFileChange}
-          className="block mx-auto"
-        />
-        {file && (
-          <p className="text-sm text-slate-600">
-            Selected: <strong>{file.name}</strong>
-          </p>
-        )}
-        <Button onClick={handleUpload} disabled={!file || uploading}>
-          {uploading ? 'Uploading...' : 'Upload Document'}
-        </Button>
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i]
+  }
+
+  return (
+    <div className="space-y-8 p-6 max-w-7xl">
+      <div>
+        <h1 className="text-4xl font-bold text-slate-900">Legal Desk</h1>
+        <p className="text-slate-600 text-lg mt-2">Upload and analyze your legal documents with AI-powered insights</p>
       </div>
 
-      {message && (
-        <p className={`text-sm ${message.startsWith('✅') ? 'text-green-600' : 'text-red-600'}`}>
-          {message}
-        </p>
-      )}
+      {/* Upload Section */}
+      <div className="bg-white rounded-xl border-2 shadow-lg overflow-hidden">
+        <div
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+          className={`p-8 text-center transition-all`}
+        >
+          <div className="space-y-4">
+            {!file ? (
+              <>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.docx,.jpg,.jpeg,.png"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`w-full border-2 border-dashed rounded-lg p-8 text-center transition-all cursor-pointer group ${
+                    dragActive
+                      ? 'border-indigo-500 bg-indigo-50'
+                      : 'border-indigo-300 hover:border-indigo-500 hover:bg-indigo-50'
+                  }`}
+                >
+                  <div className="text-5xl mb-3 group-hover:scale-110 transition-transform">📄</div>
+                  <p className="font-semibold text-indigo-600 group-hover:text-indigo-700 mb-1 text-lg">Choose File</p>
+                  <p className="text-sm text-slate-600">Or drag and drop here</p>
+                  <p className="text-xs text-slate-500 mt-2">Supported: PDF, DOCX, JPG, PNG (Max 10MB)</p>
+                </button>
+              </>
+            ) : (
+              <div className="space-y-4">
+                <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 flex items-center gap-3">
+                  <span className="text-3xl flex-shrink-0">{getFileIcon(file.name)}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-indigo-900 truncate">{file.name}</p>
+                    <p className="text-xs text-indigo-700">{formatFileSize(file.size)}</p>
+                  </div>
+                  <button
+                    onClick={() => setFile(null)}
+                    type="button"
+                    className="text-indigo-400 hover:text-indigo-600 font-bold text-2xl leading-none flex-shrink-0"
+                  >
+                    ✕
+                  </button>
+                </div>
 
-      <div className="space-y-2">
-        <h2 className="text-lg font-semibold">Your Documents</h2>
-        {documents.length === 0 && !uploading && (
-          <p className="text-slate-400 text-sm">No documents yet.</p>
-        )}
-        
-        {documents.map((doc) => (
-          <div key={doc.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 transition-colors">
-            <Link href={`/dashboard/legal-desk/${doc.id}`} className="flex-1">
-              <p className="font-medium">{doc.file_name}</p>
-              <p className="text-sm text-slate-400">
-                {new Date(doc.created_at).toLocaleDateString()}
-              </p>
-            </Link>
-            <div className="flex items-center gap-2">
-              <Link href={`/dashboard/legal-desk/${doc.id}`} className="text-sm text-slate-500">Chat</Link>
-              <DeleteDocumentButton documentId={doc.id} storagePath={doc.storage_path} />
-            </div>
+                <Button
+                  onClick={handleUpload}
+                  disabled={!file || uploading}
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-lg transition-all disabled:bg-slate-300 disabled:cursor-not-allowed"
+                >
+                  {uploading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      Uploading...
+                    </span>
+                  ) : (
+                    'Upload Document'
+                  )}
+                </Button>
+              </div>
+            )}
           </div>
-        ))}
+        </div>
+
+        {/* Status Message */}
+        {message && (
+          <div className={`px-8 py-4 border-t ${
+            message.startsWith('✅')
+              ? 'bg-green-50 border-t-green-200 text-green-800'
+              : 'bg-red-50 border-t-red-200 text-red-800'
+          }`}>
+            <p className="font-medium text-sm">{message}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Documents List */}
+      <div>
+        <h2 className="text-2xl font-bold text-slate-900 mb-4">Your Documents</h2>
+        {documents.length === 0 && !uploading ? (
+          <div className="text-center py-12 bg-slate-50 rounded-xl border border-slate-200">
+            <p className="text-slate-500 text-lg">No documents yet. Upload your first document to get started.</p>
+          </div>
+        ) : (
+          <div className="grid gap-3">
+            {documents.map((doc) => (
+              <Link href={`/dashboard/legal-desk/${doc.id}`} key={doc.id}>
+                <div className="bg-white p-4 rounded-xl border border-slate-200 hover:border-indigo-300 hover:shadow-md transition-all group cursor-pointer">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <span className="text-2xl flex-shrink-0">{getFileIcon(doc.file_name)}</span>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-slate-900 truncate group-hover:text-indigo-600 transition-colors">
+                          {doc.file_name}
+                        </p>
+                        <p className="text-sm text-slate-500">
+                          {new Date(doc.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 ml-4">
+                      <span className="text-sm font-medium text-indigo-600 group-hover:text-indigo-700 px-3 py-1 bg-indigo-50 rounded-lg transition-colors">
+                        💬 Chat
+                      </span>
+                      <DeleteDocumentButton documentId={doc.id} storagePath={doc.storage_path} />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

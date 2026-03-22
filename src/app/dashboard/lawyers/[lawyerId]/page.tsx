@@ -35,6 +35,7 @@ export default async function LawyerProfilePage({ params }: { params: Promise<{ 
 
       <hr className="border-slate-100" />
 
+      {/* Specializations */}
       {lawyer.specialization?.length > 0 && (
         <div>
           <h2 className="text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wider">Specializations</h2>
@@ -48,6 +49,23 @@ export default async function LawyerProfilePage({ params }: { params: Promise<{ 
         </div>
       )}
 
+      {/* Experience & Location */}
+      <div className="grid grid-cols-2 gap-4">
+        {lawyer.years_of_experience && (
+          <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+            <h2 className="text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Experience</h2>
+            <p className="text-sm font-medium text-slate-800">{lawyer.years_of_experience} years</p>
+          </div>
+        )}
+        {lawyer.phone && (
+          <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+            <h2 className="text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Phone</h2>
+            <p className="text-sm font-medium text-slate-800">+91 {lawyer.phone}</p>
+          </div>
+        )}
+      </div>
+
+      {/* Bio */}
       {lawyer.bio && (
         <div>
           <h2 className="text-sm font-semibold text-slate-500 mb-2 uppercase tracking-wider">About</h2>
@@ -55,6 +73,7 @@ export default async function LawyerProfilePage({ params }: { params: Promise<{ 
         </div>
       )}
 
+      {/* Bar Council ID */}
       {lawyer.bar_council_id && (
         <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
           <h2 className="text-xs font-semibold text-slate-500 mb-1 uppercase tracking-wider">Bar Council ID</h2>
@@ -69,7 +88,7 @@ export default async function LawyerProfilePage({ params }: { params: Promise<{ 
         >
           Contact Lawyer
         </Link>
-        <Link 
+        <Link
           href="/dashboard/lawyers"
           className="px-8 py-3 rounded-lg border border-slate-200 text-sm font-medium hover:bg-slate-50 transition-all"
         >
@@ -79,4 +98,3 @@ export default async function LawyerProfilePage({ params }: { params: Promise<{ 
     </div>
   )
 }
-
