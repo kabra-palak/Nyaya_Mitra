@@ -27,15 +27,21 @@ export default function OnboardingPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
 
-      const { data: lawyer } = await supabase
-        .from('lawyer_profiles')
-        .select('*')
+      // Check role
+      const { data: userProfile } = await supabase
+        .from('user_profiles')
+        .select('role, full_name, city')
         .eq('id', user.id)
         .single()
 
-      const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('full_name, city')
+      if (userProfile?.role !== 'lawyer') {
+        router.push('/dashboard')
+        return
+      }
+
+      const { data: lawyer } = await supabase
+        .from('lawyer_profiles')
+        .select('*')
         .eq('id', user.id)
         .single()
 
@@ -48,9 +54,9 @@ export default function OnboardingPage() {
         setVerified(lawyer.verified || false)
       }
 
-      if (profile) {
-        setCity(profile.city || '')
-        if (!lawyer?.full_name) setFullName(profile.full_name || '')
+      if (userProfile) {
+        setCity(userProfile.city || '')
+        if (!lawyer?.full_name) setFullName(userProfile.full_name || '')
       }
 
       setFetching(false)
