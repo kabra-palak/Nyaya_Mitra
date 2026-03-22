@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link' // Added this import
+import DeleteDocumentButton from '@/components/DeleteDocumentButton'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 
@@ -108,19 +109,18 @@ export default function LegalDeskPage() {
         )}
         
         {documents.map((doc) => (
-          <Link
-            key={doc.id}
-            href={`/dashboard/legal-desk/${doc.id}`}
-            className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 transition-colors"
-          >
-            <div>
+          <div key={doc.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-slate-50 transition-colors">
+            <Link href={`/dashboard/legal-desk/${doc.id}`} className="flex-1">
               <p className="font-medium">{doc.file_name}</p>
               <p className="text-sm text-slate-400">
                 {new Date(doc.created_at).toLocaleDateString()}
               </p>
+            </Link>
+            <div className="flex items-center gap-2">
+              <Link href={`/dashboard/legal-desk/${doc.id}`} className="text-sm text-slate-500">Chat</Link>
+              <DeleteDocumentButton documentId={doc.id} storagePath={doc.storage_path} />
             </div>
-            <span className="text-sm text-slate-500">Chat →</span>
-          </Link>
+          </div>
         ))}
       </div>
     </div>
