@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
@@ -18,7 +18,45 @@ export default function OnboardingPage() {
   const [hourlyRate, setHourlyRate] = useState('')
   const [city, setCity] = useState('')
   const [loading, setLoading] = useState(false)
+  const [fetching, setFetching] = useState(true)
   const [error, setError] = useState('')
+  const [verified, setVerified] = useState(false)
+
+  useEffect(() => {
+    async function loadProfile() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const { data: lawyer } = await supabase
+        .from('lawyer_profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('full_name, city')
+        .eq('id', user.id)
+        .single()
+
+      if (lawyer) {
+        setFullName(lawyer.full_name || '')
+        setBarCouncilId(lawyer.bar_council_id || '')
+        setSpecialization(lawyer.specialization?.join(', ') || '')
+        setBio(lawyer.bio || '')
+        setHourlyRate(lawyer.hourly_rate?.toString() || '')
+        setVerified(lawyer.verified || false)
+      }
+
+      if (profile) {
+        setCity(profile.city || '')
+        if (!lawyer?.full_name) setFullName(profile.full_name || '')
+      }
+
+      setFetching(false)
+    }
+    loadProfile()
+  }, [])
 
   async function handleSubmit() {
     setLoading(true)
@@ -47,7 +85,6 @@ export default function OnboardingPage() {
       return
     }
 
-    // Update user_profiles full_name
     await supabase
       .from('user_profiles')
       .update({ full_name: fullName, city })
@@ -56,10 +93,19 @@ export default function OnboardingPage() {
     router.push('/dashboard')
   }
 
+  if (fetching) return <p className="text-slate-400">Loading profile...</p>
+
   return (
     <div className="max-w-lg space-y-6">
-      <h1 className="text-2xl font-bold">Complete Your Lawyer Profile</h1>
-      <p className="text-slate-500">Fill in your details to appear in the lawyer directory.</p>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">My Lawyer Profile</h1>
+        {verified ? (
+          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">✓ Verified</span>
+        ) : (
+          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded-full">Pending Verification</span>
+        )}
+      </div>
+      <p className="text-slate-500">Update your details to appear in the lawyer directory.</p>
 
       <div className="space-y-2">
         <Label>Full Name</Label>
@@ -98,10 +144,14 @@ export default function OnboardingPage() {
 
       {error && <p className="text-red-500 text-sm">{error}</p>}
 
-      <p className="text-xs text-slate-400">Your profile will be reviewed and verified before appearing in the directory.</p>
+      <p className="text-xs text-slate-400">
+        {verified
+          ? 'Your profile is verified and visible in the directory.'
+          : 'Your profile will be reviewed and verified before appearing in the directory.'}
+      </p>
 
       <Button onClick={handleSubmit} disabled={loading || !fullName || !barCouncilId} className="w-full">
-        {loading ? 'Saving...' : 'Submit Profile'}
+        {loading ? 'Saving...' : 'Update Profile'}
       </Button>
     </div>
   )
