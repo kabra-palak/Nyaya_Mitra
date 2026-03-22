@@ -11,6 +11,8 @@ interface Document {
   id: string
   file_name: string
   created_at: string
+  storage_path: string
+
 }
 
 export default function LegalDeskPage() {
