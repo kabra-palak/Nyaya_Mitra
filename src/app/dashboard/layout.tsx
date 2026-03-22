@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import LogoutButton from '@/components/LogoutButton'
 
 export default async function DashboardLayout({
   children,
@@ -20,8 +21,9 @@ export default async function DashboardLayout({
         <a href="/dashboard/chat" className="px-3 py-2 rounded hover:bg-slate-100">Legal Chat</a>
         <a href="/dashboard/lawyers" className="px-3 py-2 rounded hover:bg-slate-100">Find Lawyers</a>
         <a href="/dashboard/forms" className="px-3 py-2 rounded hover:bg-slate-100">Form Assistant</a>
-        <div className="mt-auto">
+        <div className="mt-auto space-y-2">
           <p className="text-sm text-slate-500 px-3">{user.email}</p>
+          <LogoutButton />
         </div>
       </aside>
       <main className="flex-1 p-8">
